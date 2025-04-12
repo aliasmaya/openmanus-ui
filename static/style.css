@@ -1,0 +1,369 @@
+body {
+    background-color: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.sidebar {
+    background-color: #ffffff;
+    width: 60px;
+    height: 200px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: fixed;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.btn.rounded-circle {
+    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.sidebar .btn-group {
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar .btn-group:not(:last-child)::after {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 15px auto;
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        width: 60px;
+        height: 340px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #sidebarCollapse.show {
+        width: 200px;
+        height: 340px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: fixed;
+        z-index: 1000;
+        width: 70px;
+    }
+
+    .main-content {
+        margin-left: 70px;
+    }
+
+    .sidebar .btn.rounded-circle {
+        padding: 0.5rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+.btn.rounded-circle:hover {
+    transform: scale(1.1);
+}
+
+.main-content {
+    padding: 20px;
+    height: calc(100vh - 250px);
+    width: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+.bottom-fixed-area {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 780px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    height: 250px;
+}
+
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 250px;
+}
+
+.main-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.input-container {
+    width: 100%;
+    height: 122px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+#messageInput {
+    width: 100%;
+    height: 100%;
+    padding: 15px 120px 15px 15px;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    resize: none;
+}
+
+.long-thought-toggle {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+#sendButton {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    border-radius: 18px;
+}
+
+.btn-history {
+    position: absolute;
+    right: 100px;
+    bottom: 10px;
+    border-radius: 18px;
+}
+
+.btn-chat {
+    position: absolute;
+    right: 57px;
+    bottom: 10px;
+    border-radius: 18px;
+}
+
+.prompt-shortcuts {
+    width: 100%;
+    /* margin: 10px 0; */
+    text-align: center;
+}
+
+.prompt-shortcut {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.prompt-shortcut:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-text {
+    text-align: center;
+    margin-top: 15px;
+    color: #495057;
+    font-size: 14px;
+}
+
+.slogan {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.copyright {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.chat-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.user-message {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.ai-message {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+}
+
+.message-content {
+    max-width: 95%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    position: relative;
+}
+
+.user-message .message-content {
+    background-color: #007bff;
+    color: white;
+    border-radius: 18px 0 18px 18px;
+}
+
+.ai-message .message-content {
+    background-color: #e9ecef;
+    border-radius: 18px 18px 18px 0;
+}
+
+.message-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+.user-message .message-icon {
+    background-color: #0056b3;
+    color: white;
+}
+
+.ai-message .message-icon {
+    background-color: #d1d7dc;
+    color: #495057;
+}
+
+.thought-quote {
+    background-color: #f8f9fa;
+    border-left: 3px solid #6c757d;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 0 8px 8px 0;
+    transition: all 0.3s ease;
+}
+
+.thought-quote.collapsed {
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.thought-quote.collapsed .quote-content {
+    display: none;
+}
+
+.quote-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #495057;
+    cursor: pointer;
+}
+
+.quote-content {
+    font-size: 14px;
+    color: #6c757d;
+    padding-left: 10px;
+}
+
+.ai-final-answer {
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+}
+
+body.dark-theme {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.dark-theme .sidebar {
+    background-color: #2d2d2d;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .bottom-fixed-area {
+    background-color: #2d2d2d;
+    border-top: 1px solid #444;
+}
+
+.dark-theme .message-content {
+    background-color: #444;
+    color: #fff;
+}
+
+.dark-theme .ai-message .message-icon {
+    background-color: #555;
+    color: #ddd;
+}
+
+.dropdown-submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-top: -1px;
+    margin-left: 0.125rem;
+    display: none;
+}
+
+.dropdown-item:hover .dropdown-submenu {
+    display: block;
+}
+
+.dropdown-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item .bi-check2 {
+    display: none;
+}
+
+.dropdown-item.active .bi-check2 {
+    display: inline-block;
+}
+
+#historyList .list-group-item {
+    cursor: default;
+}
+
+#historyList .list-group-item .fw-bold {
+    cursor: pointer;
+}
+
+#historyList .list-group-item:hover {
+    background-color: #f8f9fa;
+}
