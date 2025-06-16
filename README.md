@@ -15,7 +15,7 @@ OpenManus-UI is an open-source project designed to enhance the functionality of 
 - **Pure JavaScript**: Lightweight and fast, with no heavy dependencies other than Bootstrap.
 
 <div align="center" style="display: flex; gap: 20px;">
-    <img src="assets/screenshot_theme.png" alt="OpenManus-UI" />
+    <img src="assets/screenshot.png" alt="OpenManus-UI" />
 </div>
 
 ## Installation
