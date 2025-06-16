@@ -3,6 +3,11 @@ let aiMessageDiv = null;
 let finalAnswer = null;
 let thoughtQuote = null;
 let chatMessages = null;
+let chat_state = 'none';
+
+function getMarkedText(text) {
+    return DOMPurify.sanitize(marked.parse(text))
+}
 
 function showErrorToast(message) {
     const toastEl = document.getElementById('errorToast');
@@ -11,6 +16,11 @@ function showErrorToast(message) {
 
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
+}
+
+function toggle_chat_state(state) {
+    chat_state = state
+    document.getElementById('send-spinner').style.display = chat_state
 }
 
 function createChat() {
@@ -102,19 +112,20 @@ function setupSSE(taskId, isLongThought) {
                 lastResultContent = data.result || '';
 
                 if (lastResultContent) {
-                    // if (isLongThought) {
-                    //     finalAnswer.textContent = lastResultContent
-                    // } else {
-                    //     addMessage(lastResultContent, 'ai')
-                    // }
-                    console.log(lastResultContent)
+                    if (isLongThought) {
+                        finalAnswer.innerHTML = getMarkedText(lastResultContent);
+                    } else {
+                        addMessage(lastResultContent, 'ai');
+                    }
+                    // console.log(lastResultContent);
                 }
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                scrollView();
                 eventSource.close();
                 currentEventSource = null;
             } catch (e) {
                 console.error('Error handling complete event:', e);
             }
+            toggle_chat_state('none');
         });
 
         eventSource.addEventListener('error', (event) => {
@@ -124,6 +135,7 @@ function setupSSE(taskId, isLongThought) {
                 showErrorToast(data.message)
                 eventSource.close();
                 currentEventSource = null;
+                toggle_chat_state('none');
             } catch (e) {
                 console.error('Error handling failed:', e);
             }
@@ -257,7 +269,12 @@ function addMessage(text, sender) {
     }
 
     chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    scrollView();
+}
+
+function scrollView() {
+    if (!chatMessages) return
+    chatMessages.scrollIntoView({ behavior: "auto", block: "end" })
 }
 
 function createLongThought(prompt) {
@@ -281,7 +298,7 @@ function createLongThought(prompt) {
             <span class="toggle-icon expanded"><i class="bi bi-chevron-down"></i></span>
         </div>
         <div class="quote-content">
-            <div class="thinking-message">${prompt}</div>
+            <div class="thinking-message">${getMarkedText(prompt)}</div>
         </div>
     `;
 
@@ -295,7 +312,7 @@ function createLongThought(prompt) {
     aiMessageDiv.appendChild(contentDiv);
 
     chatMessages.appendChild(aiMessageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    scrollView();
 
     thoughtQuote.addEventListener('click', function (e) {
         if (e.target.closest('.quote-header')) {
@@ -310,29 +327,38 @@ function createLongThought(prompt) {
 function getCustomCss() {
     return `
         <style>
-            .ai-table {
-                border-collapse: collapse;
-                width: 100%;
+            .message-content h1, .message-content h2, .message-content h3,
+            .message-content h4, .message-content h5, .message-content h6 {
                 margin: 10px 0;
+                color: #343a40;
             }
-            .ai-table th {
-                background-color: #343a40;
-                color: white;
-                padding: 8px 12px;
-                text-align: left;
+            .message-content p {
+                margin: 5px 0;
             }
-            .ai-table td {
-                padding: 8px 12px;
-                border: 1px solid #dee2e6;
+            .message-content ul, .message-content ol {
+                margin: 10px 0;
+                padding-left: 20px;
             }
-            .ai-table tr:nth-child(even) {
+            .message-content li {
+                margin: 5px 0;
+            }
+            .message-content a {
+                color: #007bff;
+                text-decoration: none;
+            }
+            .message-content a:hover {
+                text-decoration: underline;
+            }
+            .message-content code {
                 background-color: #f8f9fa;
+                padding: 2px 4px;
+                border-radius: 4px;
             }
-            .ai-table tr:hover {
-                background-color: #e9ecef;
-            }
-            .ai-table-container {
-                margin: 15px 0;
+            .message-content pre {
+                background-color: #f8f9fa;
+                padding: 10px;
+                border-radius: 8px;
+                overflow-x: auto;
             }
         </style>
     `;
@@ -341,36 +367,33 @@ function getCustomCss() {
 document.addEventListener('DOMContentLoaded', function () {
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
-    const historyBtn = document.getElementById('btn-history');
-    const chatBtn = document.getElementById('btn-chat');
     chatMessages = document.getElementById('chatMessages');
-
-    const tooltipSend = new bootstrap.Tooltip(sendButton);
-    const tooltipHist = new bootstrap.Tooltip(historyBtn);
-    const tooltipChat = new bootstrap.Tooltip(chatBtn);
 
     if (!messageInput || !sendButton || !chatMessages) {
         console.error('Required elements not found!');
         return;
     }
 
-    messageInput.addEventListener('input', function () {
-        sendButton.disabled = this.value.trim() === '';
-    });
+    toggle_chat_state('none');
 
     const promptShortcuts = document.querySelectorAll('.prompt-shortcut');
 
     function sendMessage() {
+        if (chat_state !== 'none') {
+            showErrorToast('Chat bot still under working, please wait...');
+            return;
+        }
         const message = messageInput.value.trim();
-        if (message && !sendButton.disabled) {
-            sendButton.disabled = true;
+        if (message) {
+            toggle_chat_state('');
             createChat();
         }
     }
 
     sendButton.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
             sendMessage();
         }
     });
@@ -379,7 +402,6 @@ document.addEventListener('DOMContentLoaded', function () {
         shortcut.addEventListener('click', function () {
             messageInput.value = this.textContent;
             messageInput.focus();
-            sendButton.disabled = messageInput.value.trim() === '';
         });
     });
 
