@@ -1,10 +1,10 @@
 # OpenManus-UI
 
-Welcome to OpenManus-UI, a modern and responsive Web UI built to support [OpenManus](https://github.com/mannaandpoem/OpenManus). Developed using Bootstrap and pure JavaScript with Server-Sent Events (SSE), OpenManus-UI provides an intuitive interface for users to interact with the OpenManus platform.
+Welcome to OpenManus-UI, a modern and responsive Web UI built to support [OpenManus](https://github.com/FoundationAgents/OpenManus). Developed using Bootstrap and pure JavaScript with Server-Sent Events (SSE), OpenManus-UI provides an intuitive interface for users to interact with the OpenManus platform.
 
 ## Overview
 
-OpenManus-UI is an open-source project designed to enhance the functionality of [OpenManus](https://github.com/mannaandpoem/OpenManus) by offering a sleek, user-friendly web interface. It supports features like history chat data reload and boasts a contemporary layout design, making it easy for developers and end-users alike to navigate and utilize.
+OpenManus-UI is an open-source project designed to enhance the functionality of [OpenManus](https://github.com/FoundationAgents/OpenManus) by offering a sleek, user-friendly web interface. It supports features like history chat data reload and boasts a contemporary layout design, making it easy for developers and end-users alike to navigate and utilize.
 
 ## Features
 
@@ -44,4 +44,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Appreciation to the [OpenManus](https://github.com/mannaandpoem/OpenManus) and community for their support and collaboration.
+- Appreciation to the [OpenManus](https://github.com/FoundationAgents/OpenManus) and community for their support and collaboration.
