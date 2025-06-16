@@ -156,7 +156,7 @@ async def run_task(task_id: str, prompt: str):
                 event_type = "log"
                 if "✨ Manus's thoughts:" in cleaned_message:
                     event_type = "think"
-                elif "🛠️ Manus selected" in cleaned_message:
+                elif "🛠 Manus selected" in cleaned_message:
                     event_type = "tool"
                 elif "🎯 Tool" in cleaned_message:
                     event_type = "act"
@@ -170,11 +170,12 @@ async def run_task(task_id: str, prompt: str):
                 )
 
         sse_handler = SSELogHandler(task_id)
-        logger.add(sse_handler)
+        hwnd = logger.add(sse_handler)
 
         result = await agent.run(prompt)
+        logger.remove(hwnd)
         await task_manager.update_task_step(task_id, 1, result, "result")
-        await asyncio.sleep(10)
+        await asyncio.sleep(3)
         await task_manager.complete_task(task_id, result)
     except Exception as e:
         await task_manager.fail_task(task_id, str(e))
