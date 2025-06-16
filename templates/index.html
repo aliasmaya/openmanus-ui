@@ -51,6 +51,33 @@
           transform: scale(1.5);
         }
       }
+      .copy-btn {
+        display: none; /* Ensure initial state is hidden */
+        position: absolute;
+        top: calc(100% - 30px);
+        right: 0;
+        z-index: 2000; /* High z-index to appear above other elements */
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 1;
+        align-items: center;
+        justify-content: center;
+      }
+      .message-content:hover .copy-btn {
+        display: flex; /* Show on hover */
+      }
+      .copy-toast {
+        position: absolute;
+        top: calc(100% + 5px);
+        z-index: 1000;
+        min-width: 240px;
+      }
     </style>
   </head>
 
@@ -278,5 +305,53 @@
     <script src="static/bootstrap.bundle.min.js"></script>
     <script src="static/purify.min.js"></script>
     <script src="static/main.js"></script>
+    <script>
+      function copyMessage(element) {
+        const messageText = element
+          .closest(".message-content")
+          .querySelector(".user-prompt")
+          .textContent.trim();
+        // Create toast
+        const toast = document.createElement("div");
+        toast.className = "toast copy-toast";
+        toast.setAttribute("role", "alert");
+        toast.setAttribute("aria-live", "assertive");
+        toast.setAttribute("aria-atomic", "true");
+        toast.setAttribute("data-bs-autohide", "true");
+        toast.setAttribute("data-bs-delay", "3000");
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(messageText).then(() => {
+            toast.innerHTML = `
+                  <div class="toast-body">
+                    <i class="bi bi-check-circle text-success"></i> Message copied to clipboard!
+                  </div>
+              `;
+            element.closest(".message-content").appendChild(toast);
+
+            // Show toast
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+
+            // Remove toast after it hides
+            toast.addEventListener("hidden.bs.toast", () => {
+              toast.remove();
+            });
+          });
+        } else {
+          // Fallback when Clipboard API is not available
+          toast.innerHTML = `
+            <div class="toast-body">
+                <i class="bi bi-exclamation-circle text-danger"></i> Copy not supported. Please copy manually.
+            </div>
+          `;
+          element.closest(".message-content").appendChild(toast);
+          const bsToast = new bootstrap.Toast(toast);
+          bsToast.show();
+          toast.addEventListener("hidden.bs.toast", () => {
+            toast.remove();
+          });
+        }
+      }
+    </script>
   </body>
 </html>
