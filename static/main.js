@@ -365,6 +365,37 @@ function getCustomCss() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Initialize tooltip
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(tooltipTriggerEl => {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    document.getElementById('btn-paperclip').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const fileInput = event.target;
+        const file = event.target.files[0];
+        if (file) {
+            if (file.type === 'text/plain') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    document.getElementById('messageInput').value = content;
+                    fileInput.value = '';
+                };
+                reader.readAsText(file);
+            } else {
+                showErrorToast('Please select a text (.txt) file.');
+                document.getElementById('fileInput').value = '';
+                document.getElementById('messageInput').value = '';
+                fileInput.value = '';
+            }
+        }
+    });
+
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     chatMessages = document.getElementById('chatMessages');
